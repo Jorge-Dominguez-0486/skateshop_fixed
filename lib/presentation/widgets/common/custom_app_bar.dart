@@ -21,7 +21,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = context.watch<AuthProvider>();
     return AppBar(
       title: Text(title, style: AppTextStyles.heading2),
       leading: Builder(
@@ -43,12 +42,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
-        if (auth.isLoggedIn && auth.isAdmin)
-          IconButton(
-            icon: const Icon(Icons.bolt, color: AppColors.accentOrange),
-            onPressed: () => Navigator.pushReplacementNamed(context, '/admin'),
-            tooltip: 'Panel Admin',
-          ),
+        Consumer<AuthProvider>(
+          builder: (_, auth, __) {
+            if (auth.isLoading) return const SizedBox.shrink();
+            if (auth.isLoggedIn && auth.isAdmin) {
+              return IconButton(
+                icon: const Icon(Icons.bolt, color: AppColors.accentOrange),
+                onPressed: () => Navigator.pushReplacementNamed(context, '/admin'),
+                tooltip: 'Panel Admin',
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
       ],
     );
   }

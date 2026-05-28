@@ -13,6 +13,11 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    if (auth.isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     final user = auth.currentUser;
     final initial = (user?.nombre ?? auth.firebaseUser?.email ?? '?')[0].toUpperCase();
 

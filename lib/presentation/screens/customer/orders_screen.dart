@@ -29,6 +29,11 @@ class OrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthProvider>();
+    if (auth.isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     final userId = auth.currentUser?.id ?? '';
     return Scaffold(
       drawer: const HamburgerDrawer(),
